@@ -6,7 +6,7 @@ import os
 import re
 import wave
 
-from hs_rag import IndexErrorBase, load_environment
+from hs_rag import IndexErrorBase, load_environment, require_openai_key
 
 
 def speech_text(text: str) -> str:
@@ -22,6 +22,7 @@ def transcribe_recording(data: bytes, *, client=None) -> str:
         raise IndexErrorBase('Bitte nimm eine kurze Frage auf; die Aufnahme darf höchstens 10 MB groß sein.')
     load_environment()
     if client is None:
+        require_openai_key()
         from openai import OpenAI
         client = OpenAI(timeout=45, max_retries=2)
     result = client.audio.transcriptions.create(
@@ -47,7 +48,7 @@ def pcm_to_wav(data: bytes) -> bytes:
 
 async def _speak(text: str) -> bytes:
     from openai import AsyncOpenAI
-    load_environment()
+    require_openai_key()
     model = os.environ.get('HS_VOICE_MODEL', 'gpt-realtime-2.1-mini')
     voice = os.environ.get('HS_VOICE', 'marin')
     pcm = bytearray()

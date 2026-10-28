@@ -68,8 +68,13 @@ paths are resolved from the project root, independently of the working directory
    ```
 
    Add any optional `HS_CHAT_PROVIDER`, `HS_CHAT_MODEL`, or voice configuration
-   here too, using top-level TOML keys. Top-level secrets become environment
-   variables, which the app already reads. The local `.env` stays local.
+   here too, using top-level TOML keys, without an `[openai]` section. The app
+   explicitly loads Streamlit secrets for chat, embeddings, and voice. The local
+   `.env` stays local. Making the GitHub repository private does not transfer
+   its local environment or configure the cloud API key.
+   For an existing app, open **Manage app → Settings → Secrets**, paste the
+   configuration above with your real key, and click **Save**. Reload the app;
+   reboot it from **Manage app** if the previous configuration is still active.
 5. Deploy, or let Streamlit rebuild after the push. If it still fails, open
    **Manage app** and read the first installation error in the logs. The generic
    “Error installing requirements” page does not identify the failing package.

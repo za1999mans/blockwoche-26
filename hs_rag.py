@@ -6,6 +6,7 @@ nur einen neuen Fragevektor. Unveränderte Texte werden über SHA-256 wiedererka
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from functools import cached_property, lru_cache
@@ -37,9 +38,33 @@ class IndexErrorBase(ValueError):
     """Verständlicher Konfigurations- oder Datenfehler, ohne Zugangsdaten."""
 
 
-def load_environment() -> None:
+def load_environment(secrets: Mapping | None = None) -> None:
+    """Cloud-Secrets laden; lokal bleibt .env als Fallback verfügbar."""
     from dotenv import load_dotenv
+    if secrets is not None:
+        keys = (
+            "OPENAI_API_KEY", "DEEPSEEK_API_KEY", "HS_RAG_DB", "HS_EMBEDDING_MODEL",
+            "HS_CHAT_PROVIDER", "HS_CHAT_MODEL", "HS_TRANSCRIPTION_MODEL",
+            "HS_VOICE_MODEL", "HS_VOICE",
+        )
+        try:
+            values = [(key, secrets.get(key)) for key in keys]
+        except FileNotFoundError:
+            # st.secrets is lazy and raises if no local secrets.toml exists.
+            values = []
+        for key, value in values:
+            if not os.environ.get(key) and isinstance(value, str) and value.strip():
+                os.environ[key] = value.strip()
     load_dotenv(ROOT / ".env")
+
+
+def require_openai_key() -> None:
+    load_environment()
+    if not os.environ.get("OPENAI_API_KEY", "").strip():
+        raise IndexErrorBase(
+            "OPENAI_API_KEY fehlt. Bitte in Streamlit Cloud unter Manage app → "
+            "Settings → Secrets hinterlegen; lokal in .env."
+        )
 
 
 def database_path() -> Path:
@@ -129,10 +154,8 @@ class OpenAIEmbeddings:
 
     @cached_property
     def client(self):
-        load_environment()
+        require_openai_key()
         from openai import OpenAI
-        if not os.environ.get("OPENAI_API_KEY"):
-            raise IndexErrorBase("OPENAI_API_KEY fehlt. Bitte lokal in .env konfigurieren.")
         return OpenAI(timeout=60.0, max_retries=3)
 
     def __call__(self, texts: list[str]) -> list[list[float]]:

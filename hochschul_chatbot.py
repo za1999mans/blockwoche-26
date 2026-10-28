@@ -9,7 +9,7 @@ from hs_rag import (VectorIndex, answer_question, database_path, friendly_error,
                     load_environment)
 from hs_voice import synthesize_reply, transcribe_recording
 
-load_environment()
+load_environment(secrets=st.secrets)
 st.set_page_config(page_title='Dein Studienbegleiter · Hochschule Osnabrück', page_icon='🎓')
 st.caption('DEIN STUDIENBEGLEITER · HOCHSCHULE OSNABRÜCK')
 st.title('Finde deinen Studienweg.')
