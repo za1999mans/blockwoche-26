@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "recherchestand": "2026-10-28",
+  "stats": {
+    "studiengangsdateien": 128,
+    "mit_curriculum": 127,
+    "curriculum_zeilen": 1030,
+    "mit_modulhandbuch_pdf": 91,
+    "mit_html_schluesselmodulen": 104,
+    "inhaltliche_markdown_dateien": 133,
+    "rag_chunks": 1687,
+    "quellenabrufe": 1431
+  },
+  "errors": []
+}

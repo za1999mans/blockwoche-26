@@ -1,0 +1,148 @@
+{
+  "Kuenstliche_Intelligenz": [
+    {
+      "id": "284486c1-dd84-4dde-9ba6-acf71b963c25",
+      "bereich": "Kuenstliche_Intelligenz",
+      "question": "Was ist ein Kontextfenster (Context Window) bei Large Language Models und welche Einheit wird dafür verwendet?",
+      "answer": "Das Kontextfenster ist die maximale Anzahl an Tokens (Eingabe + Ausgabe), die das Modell gleichzeitig im Speicher halten kann. Die Einheit ist Tokens, wobei ein Token etwa 4 Zeichen oder 0,75 Wörtern entspricht.",
+      "hint": "Denke an die Begrenzung des Speichers und die Einheit, in der Textbausteine gemessen werden.",
+      "source_files": [
+        "01_LLM_Grundlagen_und_Prompting.md",
+        "02_RAG_und_Embeddings.md",
+        "03_Strukturierte_Ausgaben_JSON.md"
+      ],
+      "created_at": "2026-10-27 13:59",
+      "times_wrong": 0,
+      "last_result": "correct"
+    },
+    {
+      "id": "09332a4a-4d78-4381-8543-d1bfd420420c",
+      "bereich": "Kuenstliche_Intelligenz",
+      "question": "Welchen Einfluss hat der Hyperparameter Temperature auf die Ausgabe eines LLMs? Nenne Beispiele für niedrige und hohe Werte.",
+      "answer": "Temperature steuert die Zufälligkeit der Token-Auswahl. Niedrige Werte (z.B. 0.0–0.2) führen zu deterministischen, präzisen Antworten, ideal für Fakten und Code. Hohe Werte (z.B. 0.7–1.2) erzeugen kreativere, abwechslungsreichere Antworten mit höherem Zufallsfaktor.",
+      "hint": "Überlege, wie sich die Wahrscheinlichkeitsverteilung bei niedrigen und hohen Werten verändert.",
+      "source_files": [
+        "01_LLM_Grundlagen_und_Prompting.md",
+        "02_RAG_und_Embeddings.md",
+        "03_Strukturierte_Ausgaben_JSON.md"
+      ],
+      "created_at": "2026-10-27 13:59",
+      "times_wrong": 0,
+      "last_result": null
+    },
+    {
+      "id": "0ca44c2c-ac96-4fb7-bcc9-4b19253c130b",
+      "bereich": "Kuenstliche_Intelligenz",
+      "question": "Beschreibe die drei Schritte der RAG-Pipeline (Retrieval-Augmented Generation) und erkläre, welche Probleme von LLMs damit gelöst werden.",
+      "answer": "Die RAG-Pipeline besteht aus: 1) Indexierung: Dokumente werden in Chunks zerlegt und via Embedding-Modell in Vektoren umgewandelt. 2) Retrieval: Die Nutzeranfrage wird vektorisiert und die ähnlichsten Chunks werden per Ähnlichkeitsmaß (z.B. Cosine Similarity) gefunden. 3) Generation: Die gefundenen Chunks werden zusammen mit der Frage in den Prompt gegeben. RAG löst veraltetes Wissen (Knowledge Cutoff) und Halluzinationen bei firmeninternen/privaten Dokumenten.",
+      "hint": "Denke an die Reihenfolge: Erst Dokumente aufbereiten, dann relevante Teile finden, dann Antwort generieren.",
+      "source_files": [
+        "01_LLM_Grundlagen_und_Prompting.md",
+        "02_RAG_und_Embeddings.md",
+        "03_Strukturierte_Ausgaben_JSON.md"
+      ],
+      "created_at": "2026-10-27 13:59",
+      "times_wrong": 0,
+      "last_result": null
+    },
+    {
+      "id": "d3232390-35b2-4f67-9c1e-53688aa41081",
+      "bereich": "Kuenstliche_Intelligenz",
+      "question": "Was ist Cosine Similarity und wie interpretiert man die Werte 1.0 und 0?",
+      "answer": "Cosine Similarity misst den Winkel zwischen zwei Vektoren und berechnet sich als Skalarprodukt geteilt durch das Produkt der Beträge. Ein Wert von 1.0 bedeutet identische Ausrichtung (sehr ähnliche Bedeutung), 0 bedeutet orthogonal (keine thematische Ähnlichkeit).",
+      "hint": "Stelle dir zwei Pfeile im Raum vor: Wie ähnlich zeigen sie in die gleiche Richtung?",
+      "source_files": [
+        "01_LLM_Grundlagen_und_Prompting.md",
+        "02_RAG_und_Embeddings.md",
+        "03_Strukturierte_Ausgaben_JSON.md"
+      ],
+      "created_at": "2026-10-27 13:59",
+      "times_wrong": 0,
+      "last_result": null
+    },
+    {
+      "id": "1979f19f-2feb-4bf3-a684-a29b53a2d187",
+      "bereich": "Kuenstliche_Intelligenz",
+      "question": "Was ist der Unterschied zwischen dem JSON Mode und Structured Outputs mit Schemadefinition? Welche Anforderung muss der Prompt im JSON Mode erfüllen?",
+      "answer": "Der JSON Mode erzwingt syntaktisch valides JSON, garantiert aber nicht die Einhaltung eines bestimmten Schemas. Structured Outputs mit Schemadefinition (z.B. via Pydantic-Modell) garantieren zu 100% die Einhaltung vorgegebener Keys, Datentypen und Enums. Im JSON Mode muss der Prompt das Wort 'JSON' explizit erwähnen, sonst wirft die API einen Fehler.",
+      "hint": "Achte auf den Unterschied zwischen 'gültigem JSON' und 'garantiert schema-konformem JSON'.",
+      "source_files": [
+        "01_LLM_Grundlagen_und_Prompting.md",
+        "02_RAG_und_Embeddings.md",
+        "03_Strukturierte_Ausgaben_JSON.md"
+      ],
+      "created_at": "2026-10-27 13:59",
+      "times_wrong": 0,
+      "last_result": null
+    }
+  ],
+  "Python_Grundlagen": [
+    {
+      "id": "py-001",
+      "bereich": "Python_Grundlagen",
+      "question": "Was ist der Hauptunterschied zwischen einer Liste (list) und einem Tupel (tuple) in Python?",
+      "answer": "Listen sind veränderlich (mutable), das heißt Elemente können nach der Erstellung modifiziert, hinzugefügt oder entfernt werden. Tupel sind unveränderlich (immutable); einmal erstellt, können ihre Werte nicht mehr geändert werden.",
+      "hint": "Denke an das Konzept der Veränderbarkeit (Mutabilität) nach der Erstellung.",
+      "source_files": [
+        "01_Datentypen_und_Kontrollstrukturen.md"
+      ],
+      "created_at": "2026-10-27 14:00",
+      "times_wrong": 0,
+      "last_result": null
+    },
+    {
+      "id": "py-002",
+      "bereich": "Python_Grundlagen",
+      "question": "Wozu dienen *args und **kwargs in einer Funktionsdefinition?",
+      "answer": "*args erlaubt es, eine beliebige Anzahl von positionellen Argumenten als Tupel entgegenzunehmen. **kwargs nimmt eine beliebige Anzahl von benannten Argumenten (Keyword-Argumenten) als Dictionary entgegen.",
+      "hint": "Eines sammelt Werte als Tupel (*args), das andere Schlüssel-Wert-Paare als Dict (**kwargs).",
+      "source_files": [
+        "02_Funktionen_und_OOP.md"
+      ],
+      "created_at": "2026-10-27 14:00",
+      "times_wrong": 0,
+      "last_result": null
+    },
+    {
+      "id": "py-003",
+      "bereich": "Python_Grundlagen",
+      "question": "Warum sollte man zum Öffnen von Dateien in Python das with-Statement (Kontextmanager) verwenden?",
+      "answer": "Der with-Block garantiert, dass die Datei nach Verlassen des Blocks automatisch und sicher geschlossen wird, selbst wenn innerhalb des Blocks eine Exception auftritt.",
+      "hint": "Denke an automatische Ressourcenfreigabe und Fehlerabsicherung.",
+      "source_files": [
+        "03_Fehlerbehandlung_und_Dateien.md"
+      ],
+      "created_at": "2026-10-27 14:00",
+      "times_wrong": 0,
+      "last_result": null
+    }
+  ],
+  "Webentwicklung_und_APIs": [
+    {
+      "id": "web-001",
+      "bereich": "Webentwicklung_und_APIs",
+      "question": "Was ist der Unterschied zwischen den HTTP-Methoden GET und POST?",
+      "answer": "GET dient dem sicheren und idempotenten Abrufen von Daten ohne Seiteneffekte auf dem Server. POST dient dem Senden von Daten im Request-Body an den Server, meist um eine neue Ressource zu erstellen oder eine Verarbeitung anzustoßen.",
+      "hint": "Abfragen vs. Erstellen/Übermitteln von Nutzdaten.",
+      "source_files": [
+        "01_HTTP_und_REST_APIs.md"
+      ],
+      "created_at": "2026-10-27 14:00",
+      "times_wrong": 0,
+      "last_result": null
+    },
+    {
+      "id": "web-002",
+      "bereich": "Webentwicklung_und_APIs",
+      "question": "Wie funktioniert das Ausführungsmodell von Streamlit und wie speichert man Variablen über Reruns hinweg?",
+      "answer": "Streamlit führt bei jeder Benutzerinteraktion (Klick, Eingabe) das gesamte Skript von oben nach unten neu aus (Rerun). Um Daten und Zustände dauerhaft über Reruns hinweg zu erhalten, verwendet man st.session_state.",
+      "hint": "Top-to-Bottom Execution und die Rolle von st.session_state.",
+      "source_files": [
+        "02_Streamlit_Architektur.md"
+      ],
+      "created_at": "2026-10-27 14:00",
+      "times_wrong": 0,
+      "last_result": null
+    }
+  ]
+}
