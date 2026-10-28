@@ -21,6 +21,32 @@ poetry run streamlit run hochschul_chatbot.py --server.address 127.0.0.1
 
 Die Oberfläche ist anschließend normalerweise unter `http://localhost:8501` erreichbar. Sie bietet einen Gesprächsverlauf, Filter nach Standort, Abschluss und Studiengang sowie Quellen zu den Antworten. Der Index wird beim Start geladen; das Starten der Oberfläche erzeugt keine neuen Dokument-Embeddings.
 
+## Mit Besuchern ins Gespräch kommen
+
+Der Chat startet mit einer Begrüßung und anklickbaren Themen. Die Gesprächssteuerung unterscheidet Smalltalk, Orientierung, Rückfragen und fachliche Auskünfte. Beispielsweise wird „Hallo“ ohne Wissenssuche beantwortet. Bei „Wie viele Semester sind hier geplant?“ fragt der Bot nach dem Studiengang. Mehrdeutige Namen werden nach Abschluss oder Standort geklärt.
+
+Die bestätigte Auswahl bleibt für Folgefragen erhalten. Sie wird ausschließlich aus Nutzerangaben und dem offiziellen Studiengangskatalog abgeleitet. Eine frühere Modellantwort oder ein zufälliger Suchtreffer bestimmt den Studiengang nicht. Die Suche bleibt quellenbasiert; die Antwort soll kurz und natürlich klingen und bei Bedarf eine einzelne passende Rückfrage stellen. Antwortbuttons helfen bei der nächsten Frage.
+
+Ein typischer Ablauf:
+
+1. „Hallo“ → freundliche Begrüßung und Frage nach dem Interesse.
+2. „Wie viele Semester?“ → Rückfrage zum gewünschten Studiengang.
+3. „Informatik“ → gegebenenfalls Bachelor/Master klären.
+4. „Bachelor“ → die ursprüngliche Semesterfrage für das geklärte Angebot beantworten.
+5. „Und welche Inhalte erwarten mich?“ → denselben Studiengang weiter besprechen.
+
+## Fragen sprechen und Antworten anhören
+
+Über das Mikrofon im Eingabefeld eine Frage aufnehmen, die Aufnahme stoppen und abschicken. Der Browser benötigt dazu die Mikrofonfreigabe. Die Frage wird transkribiert und durch dieselbe Gesprächs- und Wissenslogik verarbeitet. Bei gesprochenen Fragen wird die Antwort anschließend mit einer KI-Stimme vorgelesen.
+
+Für getippte Fragen lässt sich „Antworten vorlesen“ in der Seitenleiste einschalten. Außerdem hat jede Botnachricht die Schaltfläche „Antwort anhören“. Bereits erzeugtes Audio bleibt für die Wiedergabe in der Sitzung gespeichert. Quellenmarkierungen und URLs werden beim Vorlesen ausgelassen; die Quellen bleiben im Text aufklappbar.
+
+Die Spracheingabe arbeitet mit einzelnen Aufnahmen. Die Sprachausgabe verwendet die aktuelle Realtime-API als Vorlesestimme für die zuvor erzeugte Textantwort. Nutzeraufnahmen und Antwortaudio werden in der Oberfläche im Sitzungsspeicher verarbeitet und nicht als Audiodateien gespeichert. Für die Sprachfunktionen wird auch bei einem anderen Chatprovider `OPENAI_API_KEY` benötigt.
+
+Optionale Spracheinstellungen: `HS_TRANSCRIPTION_MODEL` (Standard `gpt-transcribe`), `HS_VOICE_MODEL` (Standard `gpt-realtime-2.1-mini`) und `HS_VOICE` (Standard `marin`). Die vorhandenen Vektoren müssen für die Gesprächs- und Sprachfunktionen nicht neu erstellt werden.
+
+Die Sprach-API-Anbindung orientiert sich an der [offiziellen Dokumentation zur Transkription](https://developers.openai.com/api/docs/guides/speech-to-text) und den [Realtime-Audioereignissen](https://developers.openai.com/api/docs/guides/realtime-conversations), geprüft am 28.10.2026.
+
 ## Konfiguration
 
 Zugangsdaten bleiben ausschließlich in der lokalen `.env` oder in Umgebungsvariablen. Der Import verwendet `OPENAI_API_KEY`. Der Schlüssel wird nicht in der Datenbank, den Metadaten oder der Konsolenausgabe gespeichert.
@@ -97,11 +123,21 @@ Die echte Integrationsprüfung benötigt API-Zugriff und prüft sechs Besucherfr
 poetry run python verify_hs_rag.py --answers
 ```
 
+Der verbesserte Mehrschritt-Dialog und ein synthetischer Audio-Rundlauf lassen sich zusätzlich prüfen:
+
+```bash
+poetry run python verify_hs_dialogue.py --audio
+```
+
+Der Sprachtest erzeugt eine kurze deutsche Testfrage und transkribiert diese wieder. Er prüft die API-Anbindung; eine Aufnahme mit dem physischen Besuchermikrofon wird dadurch nicht getestet. Das Ergebnis steht lokal in `data/hs_dialogue_verification.json`.
+
 Der lokale Prüfbericht steht danach in `data/hs_rag_verification.json`. Die erstmalige Prüfung fand die erwarteten Quellen für alle sechs Fragen und erzeugte eine passende Antwort zum Hochschulinfotag. Das ist ein Funktionstest, keine umfassende Bewertung aller möglichen Beratungsfragen.
 
 | Datei | Aufgabe |
 | --- | --- |
 | `hs_rag.py` | Import, SQLite-Speicher, Vektorsuche und quellenbasierte Antworten |
+| `hs_dialogue.py` | Begrüßung, Rückfragen, Interessenerkundung und Studiengangskontext |
+| `hs_voice.py` | Transkription und natürlich gesprochene Antworten |
 | `index_hs_data.py` | CLI für Import, Status, Suche und Antworten |
 | `hochschul_chatbot.py` | Streamlit-Chatoberfläche |
 | `tests/test_hs_rag.py` | Offline-Tests mit ausdrücklich simulierten Embeddings |

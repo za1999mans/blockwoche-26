@@ -5,7 +5,7 @@ description = ""
 authors = [
     {name = "Your Name",email = "you@example.com"}
 ]
-requires-python = ">=3.15"
+requires-python = ">=3.12,<3.16"
 dependencies = [
     "openai (>=3.39.0,<4.0.0)",
     "python-dotenv (>=1.2.4,<2.0.0)",
@@ -15,6 +15,9 @@ dependencies = [
     "google (>=3.0.0,<4.0.0)",
     "google-genai (>=2.33.0,<3.0.0)"
 ]
+
+[tool.poetry]
+package-mode = false
 
 
 [build-system]

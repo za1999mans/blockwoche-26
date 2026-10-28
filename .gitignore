@@ -27,6 +27,7 @@ Thumbs.db
 # Persistenter lokaler RAG-Index (reproduzierbar aus HS_DATA/_rag/chunks.jsonl)
 data/hs_vector_index.sqlite3*
 data/hs_rag_verification.json
+data/hs_dialogue_verification.json
 # Environment & Secrets
 .env
 .env.*
