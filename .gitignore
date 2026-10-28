@@ -1,6 +1,7 @@
 # Environment & Secrets
 .env
 .env.*
+.streamlit/secrets.toml
 env_keys.txt
 *keys*.txt
 

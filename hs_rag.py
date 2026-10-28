@@ -43,7 +43,8 @@ def load_environment() -> None:
 
 
 def database_path() -> Path:
-    return Path(os.environ.get("HS_RAG_DB", str(DEFAULT_DB))).expanduser().resolve()
+    path = Path(os.environ.get("HS_RAG_DB", str(DEFAULT_DB))).expanduser()
+    return (path if path.is_absolute() else ROOT / path).resolve()
 
 
 def embedding_text(text: str) -> str:

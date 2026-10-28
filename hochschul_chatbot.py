@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 import streamlit as st
 
 from hs_dialogue import TOPICS
+from hs_index_bundle import ensure_index
 from hs_rag import (VectorIndex, answer_question, database_path, friendly_error,
                     index_status, load_environment)
 from hs_voice import synthesize_reply, transcribe_recording
@@ -47,10 +48,9 @@ def show_sources(sources):
 
 db = database_path()
 try:
-    status = index_status(db)
+    status = ensure_index(db)
     if not status['ready']:
-        st.info('Die Hochschulinformationen werden noch vorbereitet.')
-        st.code('poetry run python index_hs_data.py index')
+        st.info('Die Studienberatung ist gerade nicht verfügbar. Bitte versuche es später erneut.')
         st.stop()
     index = load_index(str(db), db.stat().st_mtime_ns, 2)
 except Exception as exc:

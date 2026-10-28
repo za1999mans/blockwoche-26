@@ -23,6 +23,10 @@ def main() -> int:
     status = commands.add_parser("status", help="Gespeicherten Index ohne API-Aufruf prüfen")
     status.add_argument("--db", type=Path, default=database_path())
     status.add_argument("--chunks", type=Path, default=DEFAULT_CHUNKS)
+    package = commands.add_parser('package', help='Fertigen Index offline für Streamlit Cloud komprimieren')
+    package.add_argument('--db', type=Path, default=database_path())
+    package.add_argument('--chunks', type=Path, default=DEFAULT_CHUNKS)
+    package.add_argument('--output', type=Path)
     for name in ["search", "ask"]:
         command = commands.add_parser(name, help="Quellen suchen" if name == "search" else "RAG-Antwort erzeugen")
         command.add_argument("question")
@@ -48,6 +52,9 @@ def main() -> int:
                                      f"Embeddings gespeichert: {done}/{total}", flush=True))
         elif args.command == "status":
             result = index_status(args.db, args.chunks)
+        elif args.command == 'package':
+            from hs_index_bundle import BUNDLE_PATH, export_index
+            result = export_index(args.db, args.output or BUNDLE_PATH, args.chunks)
         else:
             index = VectorIndex(args.db)
             options = {key: getattr(args, key) for key in

@@ -1,0 +1,12 @@
+{
+  "bundle_version": 1,
+  "schema_version": "1",
+  "database_sha256": "3db3a459e4780535eb0436e53e50859433e88aec31fabcea4c04c59030d58f71",
+  "database_bytes": 18489344,
+  "source_sha256": "cc94705f8bf9b69f322df84a61d40f660df4d0b0129599fb01bde4570c0a20f2",
+  "chunks": 1687,
+  "model": "text-embedding-3-small",
+  "dimensions": 1536,
+  "compressed_bytes": 9458767,
+  "compressed_sha256": "7586577b9c3c2bce1d22e6638f52fc28719608a6cb08b179dca3735b6e6b1762"
+}
