@@ -26,7 +26,7 @@ Beispiele für einzelne Studiengangsdokumente:
 
 ## RAG-Import
 
-Für einen sofortigen Import stehen die Abschnitte in `_rag/chunks.jsonl` bereit. Jeder Datensatz enthält Text, Dokumenttitel, Studiengangskontext, Abschnitt, Quelldatei, Quellen-URLs und Recherchestand. Embeddings und Vektorindex müssen im Zielsystem einmalig erstellt werden; die Markdown-Dateien allein erzeugen noch keinen Index.
+Für den Import stehen die Abschnitte in `_rag/chunks.jsonl` bereit. Jeder Datensatz enthält Text, Dokumenttitel, Studiengangskontext, Abschnitt, Quelldatei, Quellen-URLs und Recherchestand. Das Projekt enthält jetzt einen persistenten SQLite-Vektorspeicher, eine Suchanbindung und eine Streamlit-Chatoberfläche. Import und Start beschreibt [README_RAG.md](../README_RAG.md). Ob der lokale Import vollständig abgeschlossen ist, zeigt `poetry run python index_hs_data.py status`; die Markdown-Dateien allein erzeugen noch keinen Index.
 
 Alternativ nur die inhaltlichen Markdown-Dateien `01_*.md`, `02_*.md`, `03_*.md`, `04_studiengaenge/*.md` außer `00_index.md`, `05_*.md` und `06_*.md` einlesen. `00_UEBERSICHT.md`, `07_recherchequalitaet.md`, JSON-Dateien und `_recherche/` nicht als fachliche Antworten indexieren. Den vorgefertigten Chunkexport und dieselben Markdown-Inhalte nicht gleichzeitig doppelt importieren.
 
