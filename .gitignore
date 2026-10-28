@@ -23,3 +23,28 @@ env/
 # Operating System files
 .DS_Store
 Thumbs.db
+# Environment & Secrets
+.env
+.env.*
+env_keys.txt
+*keys*.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Operating System files
+.DS_Store
+Thumbs.db
