@@ -21,6 +21,18 @@ poetry run streamlit run hochschul_chatbot.py --server.address 127.0.0.1
 
 Die Oberfläche ist anschließend normalerweise unter `http://localhost:8501` erreichbar. Sie bietet einen Gesprächsverlauf, Filter nach Standort, Abschluss und Studiengang sowie Quellen zu den Antworten. Der Index wird beim Start geladen; das Starten der Oberfläche erzeugt keine neuen Dokument-Embeddings.
 
+## Auf Streamlit Cloud bereitstellen
+
+Das Repository enthält den fertigen Index als `HS_DATA/_rag/vector_index.sqlite3.gz` einschließlich Prüfmanifest. Beim ersten Start ohne lokale Datenbank entpackt die App dieses Paket automatisch und lädt die vorhandenen 1.687 Embeddings. Ein API-Aufruf zum erneuten Einbetten der Dokumente ist dafür nicht nötig.
+
+Der komprimierte Index und sein Prüfmanifest müssen mit dem Code nach GitHub gepusht werden. Die unkomprimierte Laufzeitdatenbank in `data/` bleibt lokal. Der API-Schlüssel für spätere Fragen und Sprachausgabe gehört in die Streamlit-App-Einstellungen unter **Secrets**:
+
+```toml
+OPENAI_API_KEY = "dein-api-schluessel"
+```
+
+Nach einer Aktualisierung des Korpus zuerst den Index aktualisieren, dann mit `poetry run python index_hs_data.py package` das Deployment-Paket neu erzeugen. Details stehen in [README_DEPLOY.md](README_DEPLOY.md).
+
 ## Mit Besuchern ins Gespräch kommen
 
 Der Chat startet mit einer Begrüßung und anklickbaren Themen. Die Gesprächssteuerung unterscheidet Smalltalk, Orientierung, Rückfragen und fachliche Auskünfte. Beispielsweise wird „Hallo“ ohne Wissenssuche beantwortet. Bei „Wie viele Semester sind hier geplant?“ fragt der Bot nach dem Studiengang. Mehrdeutige Namen werden nach Abschluss oder Standort geklärt.
@@ -138,10 +150,12 @@ Der lokale Prüfbericht steht danach in `data/hs_rag_verification.json`. Die ers
 | `hs_rag.py` | Import, SQLite-Speicher, Vektorsuche und quellenbasierte Antworten |
 | `hs_dialogue.py` | Begrüßung, Rückfragen, Interessenerkundung und Studiengangskontext |
 | `hs_voice.py` | Transkription und natürlich gesprochene Antworten |
+| `hs_index_bundle.py` | Offline-Export und automatische Wiederherstellung des Cloud-Index |
 | `index_hs_data.py` | CLI für Import, Status, Suche und Antworten |
 | `hochschul_chatbot.py` | Streamlit-Chatoberfläche |
 | `tests/test_hs_rag.py` | Offline-Tests mit ausdrücklich simulierten Embeddings |
 | `data/hs_vector_index.sqlite3` | Echter lokaler Index; über `.gitignore` ausgeschlossen |
+| `HS_DATA/_rag/vector_index.sqlite3.gz` | Versionierter Deployment-Index mit bereits berechneten Embeddings |
 
 Die Produktivdatenbank wird ausschließlich mit echten API-Embeddings aufgebaut. Die Testvektoren landen nur in temporären Testdatenbanken.
 

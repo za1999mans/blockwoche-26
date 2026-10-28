@@ -23,32 +23,41 @@ poetry run python -m unittest discover -s tests -v
 
 ## Supply the existing search index
 
-The app requires `data/hs_vector_index.sqlite3` at startup. That file is currently
-ignored by Git, so a normal push does not deploy it. Without it, the app stops
-with “Die Hochschulinformationen werden noch vorbereitet.”
+The app now ships with an offline deployment bundle:
 
-For a deployment with the existing index, check its status locally:
+- `HS_DATA/_rag/vector_index.sqlite3.gz` — the actual precomputed embeddings,
+  texts, and metadata, compressed to about 9 MB.
+- `HS_DATA/_rag/vector_index.sqlite3.gz.json` — checksums, corpus fingerprint,
+  model, dimensions, and chunk count.
+- `HS_DATA/_rag/chunks.jsonl` — the matching source chunks.
+
+Keep all three files and `hs_index_bundle.py` in Git. On a fresh cloud startup,
+the app checks and restores the bundle to `data/hs_vector_index.sqlite3` before
+loading the chat. It does not call the embedding API during this startup.
+The existing 1,687 document embeddings are reused, including after a cloud
+restart. The uncompressed runtime database remains ignored by Git.
+
+To update the package after changing and reindexing the corpus:
 
 ```bash
-poetry run python index_hs_data.py status
+poetry run python index_hs_data.py index
+poetry run python index_hs_data.py package
 ```
 
-If `ready` is true, explicitly include this existing database in the deployment
-commit:
+Commit the updated compressed package, its JSON manifest and `chunks.jsonl`
+together. The restore checks reject a bundle that does not match the chunks.
+Only active document embeddings and selected index metadata are exported;
+local absolute paths and unused embedding-cache entries are not included.
 
-```bash
-git add -f data/hs_vector_index.sqlite3
-```
-
-This reuses the existing document embeddings. Keep `HS_DATA/_rag/chunks.jsonl`
-in the repository as well. Alternatively, supply the database through your
-hosting setup and set `HS_RAG_DB` to its path. The app does not build a missing
-index automatically.
+An existing runtime database is preserved. Alternatively, provide a database
+through your hosting setup and set `HS_RAG_DB` to its path. Relative configured
+paths are resolved from the project root, independently of the working directory.
 
 ## Configure secrets and deploy
 
 1. Commit and push the dependency fixes, the app modules (including
-   `hs_dialogue.py` and `hs_voice.py`), the corpus, and the index to the branch
+   `hs_dialogue.py`, `hs_voice.py`, and `hs_index_bundle.py`), the corpus, and
+   both index-bundle files to the branch
    used by Streamlit.
 2. Select `hochschul_chatbot.py` as the main file.
 3. Choose Python **3.12** in **Advanced settings** when creating the deployment.

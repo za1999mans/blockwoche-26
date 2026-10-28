@@ -6,7 +6,7 @@ import streamlit as st
 from hs_dialogue import TOPICS
 from hs_index_bundle import ensure_index
 from hs_rag import (VectorIndex, answer_question, database_path, friendly_error,
-                    index_status, load_environment)
+                    load_environment)
 from hs_voice import synthesize_reply, transcribe_recording
 
 load_environment()
