@@ -33,4 +33,4 @@ print(result)
 """
 # print(TTS.list_voices())
 
-print(TTS.speak_to_file("Hallo, ich bin Alex! Wie geht es dir", output_path="audios/hallo.mp3", voice="cedar"))
+print(TTS.speak_to_file("Heute ist ein schöner Tag", output_path="audios/hallo.mp3", voice="cedar"))
